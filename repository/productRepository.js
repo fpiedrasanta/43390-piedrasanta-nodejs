@@ -1,5 +1,5 @@
-import Product from "./product.js";
-import File from "./file.js";
+import Product from "../models/product.js";
+import File from "../helper/file.js";
 
 //Clase de acceso a datos.
 //Si la forma de persistencia cambia, cambia el objeto repositorio 

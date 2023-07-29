@@ -1,6 +1,6 @@
-import Product from "./product.js";
-import ProductRepository from "./productRepository.js";
-import Result from "./result.js";
+import Product from "../models/product.js";
+import ProductRepository from "../repository/productRepository.js";
+import Result from "../helper/result.js";
 
 //Clase ProductManager
 export default class ProductManager {
