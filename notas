@@ -1,0 +1,126 @@
+const test = async () => {
+    //Genero la instancia de product manager.
+    const productManager = new ProductManager('.');
+
+    //Muestro la lista, debería imprimir una lista vacía en la primera ejecución.
+    //En las siguientes algo debería imprimir.
+    console.log(await productManager.getProducts());
+    
+    
+    //Genero un producto de test con el código abc123 y lo agrego.
+    //Si es la primera ejecución se agrega, si no, posiblemente no se agregué porque ya existe un producto con ese código.
+    console.log('==> INICIO CREAR PRODUCTO <==');
+    let productTest = new Product("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
+    let result = await productManager.addProduct(productTest);
+
+    if(!result.isSuccess()) {
+        console.log(result.getMessage());
+        console.log(result.getDetails());
+    }
+
+    //Imprimo el listado de productos
+    console.log(await productManager.getProducts());    
+    console.log('==> FIN CREAR PRODUCTO <==');
+
+
+    //Genero otra instancia de producto, pero con el mismo código.
+    console.log('==> INICIO CREAR PRODUCTO CON MISMO CÓDIGO <==');
+
+    productTest = new Product("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
+    result = await productManager.addProduct(productTest);
+
+    //Debería imprimir un error de que el código ya existe.
+    if(!result.isSuccess()) {
+        console.log(result.getMessage());
+        console.log(result.getDetails());
+    }
+    
+    //Imprimo el listado de productos
+    console.log(await productManager.getProducts());
+    console.log('==> FIN CREAR PRODUCTO CON MISMO CÓDIGO <==');
+
+    //Genero ahora un producto con sus propiedades vacias.
+    console.log('==> INICIO CREAR PRODUCTO CON CAMPOS VACIOS <==');
+    productTest = new Product("", "", 0, "", "", -1);
+    result = await productManager.addProduct(productTest);
+
+    //Debería imprimir varios errores, uno por cada campo obligatorio.
+    if(!result.isSuccess()) {
+        console.log(result.getMessage());
+        console.log(result.getDetails());
+    }
+
+    //Imprimo el listado de productos
+    console.log(await productManager.getProducts());
+    console.log('==> FIN CREAR PRODUCTO CON CAMPOS VACIOS <==');
+
+    //Genero otra instancia de producto, pero con código diferente.
+    console.log('==> INICIO CREAR PRODUCTO NUEVO CON CAMPOS OK <==');
+    productTest = new Product("producto prueba 2", "Este es un producto prueba 2", 200, "Sin imagen", "321cba", 25);
+    result = await productManager.addProduct(productTest);
+
+    if(!result.isSuccess()) {
+        console.log(result.getMessage());
+        console.log(result.getDetails());
+    }
+
+    //Imprimo el listado de productos
+    console.log(await productManager.getProducts());
+    console.log('==> FIN CREAR PRODUCTO NUEVO CON CAMPOS OK <==');
+
+    //Obtengo el producto con id = 1.
+    console.log('==> INICIO UPDATE PRODUCTO <==');
+    product = await productManager.getProductById(1);
+    if(product)
+    {
+        //le actualizo el código a 321cba (que ya existe!)
+        console.log('==> CON CÓDIGO REPETIDO <==');
+        product.code = '321cba';
+        result = await productManager.updateProduct(product);
+        
+        if(!result.isSuccess()) {
+            console.log(result.getMessage());
+            console.log(result.getDetails());
+        }
+
+        //Actualizo el mismo producto, ahora con código 'Hola'.
+        //Lo guardo. El código ahora será Hola, y su id sigue siendo 1.
+        //Puedo actualizar cualquier campo.
+        //En las sucesivas ejecuciones si no se elimina el archivo, este paso va a dar error porque
+        //el código Hola ya va a existir
+        console.log('==> CON CÓDIGO OK <==');
+        product.code = 'Hola';
+        result = await productManager.updateProduct(product);
+        
+        if(!result.isSuccess()) {
+            console.log(result.getMessage());
+            console.log(result.getDetails());
+        }
+    }
+    else
+    {
+        console.log("No se encontró producto con ese id");
+    }
+    console.log(await productManager.getProducts());
+    console.log('==> FIN UPDATE PRODUCTO <==');
+
+
+    //Obtengo el producto con id = 2 y, si existe, lo elimino.
+    console.log('==> INICIO DELETE PRODUCTO <==');
+    product = await productManager.getProductById(2);
+    if(product)
+    {
+        result = await productManager.deleteProduct(product);
+        
+        if(!result.isSuccess()) {
+            console.log(result.getMessage());
+            console.log(result.getDetails());
+        }
+    }
+    else
+    {
+        console.log("No se encontró producto con ese id");
+    }
+    console.log(await productManager.getProducts());
+    console.log('==> FIN DELETE PRODUCTO <==');
+}
