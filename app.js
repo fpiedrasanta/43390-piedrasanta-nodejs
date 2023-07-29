@@ -21,7 +21,14 @@ app.get('/products', async (request, response) => {
     
     if (limit) {
         const cantidad = parseInt(limit, 10); // Parseamos el límite a un número entero
-        response.json(products.slice(0, cantidad));
+        console.log(cantidad);
+        if(isNaN(cantidad)) {
+            response.status(400).json({error: "El parámetro no es un número" });
+        } else if(cantidad < 0) {
+            response.status(400).json({error: "El número debe ser un valor numérico mayor a 0" });
+        } else {
+            response.json(products.slice(0, cantidad));
+        }
     } else {
         response.json(products);
     }
@@ -30,12 +37,16 @@ app.get('/products', async (request, response) => {
 app.get('/products/:pid', async (request, response) => {
     const pid = parseInt(request.params.pid, 10);
 
-    const productManager = new ProductManager('.');
-    const product = await productManager.getProductById(pid);
-
-    if (product) {
-        response.json(product);
+    if(isNaN(pid)) {
+        response.status(400).json({error: "El parámetro no es un número" });
     } else {
-        response.status(404).json({ message: 'Producto no encontrado' });
+        const productManager = new ProductManager('.');
+        const product = await productManager.getProductById(pid);
+
+        if (product) {
+            response.json(product);
+        } else {
+            response.status(404).json({ message: 'Producto no encontrado' });
+        }
     }
 });
