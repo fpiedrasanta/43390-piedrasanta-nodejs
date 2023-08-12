@@ -17,8 +17,13 @@ export default class ProductRepository {
             
             const data = await this.file.read();
             const products = JSON.parse(data);
-            return products;
             
+            const array = [];
+            for (const product of products) {
+                array.push(Product.fromObject(product));
+            }
+            
+            return array;
         } catch(error) {
             throw new Error(
                 `Se generó un error en la lectura de los productos: ${error}`
@@ -78,8 +83,9 @@ export default class ProductRepository {
             const products = await this.getProducts();
             const product = products.find(p => p.id == id);
 
-            return product;
-            
+            if(product)
+                return Product.fromObject(product);
+            return null;
         } catch (error) {
 
             throw new Error(

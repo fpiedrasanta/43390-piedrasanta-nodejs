@@ -1,4 +1,3 @@
-import Product from "../models/product.js";
 import ProductRepository from "../repository/productRepository.js";
 import Result from "../helper/result.js";
 
@@ -11,13 +10,18 @@ export default class ProductManager {
     }
 
     getProducts = async () => {
-        return await this.productRepository.getProducts();
+        try {
+            const products = await this.productRepository.getProducts();
+            return new Result(true, "success", [], products);
+        } catch (error) {
+            return new Result(false, error, [], null);
+        }
     }
 
     validateProduct = async (product) => {
         let errors = [];
         
-        const products = await this.getProducts();
+        const products = (await this.getProducts()).getInnerObject();
 
         if(products.some(x => x.code === product.code && x.id != product.id))
         {
@@ -52,50 +56,71 @@ export default class ProductManager {
     }
 
     addProduct = async (product) => {
-        const errors = await this.validateProduct(product);
+        try {
+            const errors = await this.validateProduct(product);
 
-        if(errors.length > 0)
-        {
-            return new Result(false, 'Error al agregar un producto', errors);
+            if(errors.length > 0)
+            {
+                return new Result(false, 'Error al agregar un producto', errors, null);
+            }
+
+            await this.productRepository.addProduct(product);
+
+            return new Result(true, "El producto se agregó con éxito", [], product);
+        } catch (error) {
+            return new Result(false, error, [], null);
         }
-
-        await this.productRepository.addProduct(product);
-
-        return new Result(true, "El producto se agregó con éxito", []);
     }
 
     getProductById = async (id) => {
-        return await this.productRepository.getProductById(id);
+        try {
+            const product = await this.productRepository.getProductById(id);
+            if(product) {
+                return new Result(true, "success", [], product);
+            } else {
+                return new Result(false, "No se encontró el producto", [], null);
+            }
+        } catch (error) {
+            return new Result(false, error, [], null);
+        }
     }
 
     updateProduct = async (product) => {
-        const dbProduct = await this.productRepository.getProductById(product.id);
+        try {
+            const dbProduct = await this.productRepository.getProductById(product.id);
 
-        if(dbProduct == null) {
-            return new Result(false, "El producto no existe en la base de datos", []);
+            if(dbProduct == null) {
+                return new Result(false, "El producto no existe en la base de datos", [], null);
+            }
+
+            const errors = await this.validateProduct(product);
+
+            if(errors.length > 0)
+            {
+                return new Result(false, 'No se pudo actualizar el producto', errors, null);
+            }
+
+            await this.productRepository.updateProduct(product);
+
+            return new Result(true, "El producto se actualizó con éxito", [], product);
+        } catch (error) {
+            return new Result(false, error, [], null);
         }
-
-        const errors = await this.validateProduct(product);
-
-        if(errors.length > 0)
-        {
-            return new Result(false, 'No se pudo actualizar el producto', errors);
-        }
-
-        await this.productRepository.updateProduct(product);
-
-        return new Result(true, "El producto se actualizó con éxito", []);
     }
 
     deleteProduct = async (product) => {
-        const dbProduct = await this.productRepository.getProductById(product.id);
+        try {
+            const dbProduct = await this.productRepository.getProductById(product.id);
 
-        if(dbProduct == null) {
-            return new Result(false, "El producto no existe en la base de datos", []);
+            if(dbProduct == null) {
+                return new Result(false, "El producto no existe en la base de datos", []);
+            }
+
+            await this.productRepository.deleteProduct(product.id);
+
+            return new Result(true, "El producto se eliminó con éxito", []);
+        } catch (error) {
+            return new Result(false, error, [], null);
         }
-
-        await this.productRepository.deleteProduct(product.id);
-
-        return new Result(true, "El producto se eliminó con éxito", []);
     }
 }
