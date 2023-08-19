@@ -18,7 +18,7 @@ router.post('/', async (request, response) => {
             return;
         }
 
-        response.json(result.getInnerObject());
+        response.status(200).json({ status: 'success', response: result.getInnerObject() });
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));
     }
@@ -42,7 +42,7 @@ router.get('/:cid', async (request, response) => {
             const cart = result.getInnerObject();
 
             if (cart) {
-                response.json(cart);
+                response.status(200).json({ status: 'success', response: cart });
             } else {
                 response.status(404).json(new Result(false, "Carrito no encontrado", [], null));
             }
@@ -91,7 +91,7 @@ router.post('/:cid/product/:pid', async (request, response) => {
             return;
         }
 
-        response.json(updateResult.getInnerObject());
+        response.status(200).json({ status: 'success', response: updateResult.getInnerObject() });
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));
     }

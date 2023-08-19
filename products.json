@@ -7,7 +7,7 @@
 		"thumbnail": "Sin imagen 1",
 		"code": "0001",
 		"stock": 1
-	}, 
+	},
 	{
 		"id": 2,
 		"title": "Producto Aleatorio 2",
@@ -18,39 +18,12 @@
 		"stock": 15
 	},
 	{
-		"id": 3,
+		"id": "3",
 		"title": "Producto Aleatorio 3",
 		"description": "Descripción del Producto Aleatorio 3",
-		"price": 450,
+		"price": "450",
 		"thumbnail": "Sin imagen 3",
 		"code": "0003",
-		"stock": 40
-	},
-	{
-		"id": 4,
-		"title": "Producto Aleatorio 4",
-		"description": "Descripción del Producto Aleatorio 4",
-		"price": 180,
-		"thumbnail": "Sin imagen 4",
-		"code": "0004",
-		"stock": 20
-	},
-	{
-		"id": 5,
-		"title": "Producto Aleatorio 5",
-		"description": "Descripción del Producto Aleatorio 5",
-		"price": 300,
-		"thumbnail": "Sin imagen 5",
-		"code": "0005",
-		"stock": 35
-	},
-	{
-		"id": 6,
-		"title": "Producto Aleatorio 6",
-		"description": "Descripción del Producto Aleatorio 6",
-		"price": 600,
-		"thumbnail": "Sin imagen 6",
-		"code": "0006",
-		"stock": 36
+		"stock": "40"
 	}
 ]

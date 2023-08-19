@@ -26,10 +26,10 @@ router.get('/', async (request, response) => {
             } else if(cantidad < 0) {
                 response.status(400).json(new Result(false, "El número debe ser un valor numérico mayor a 0", [], null));
             } else {
-                response.json(products.slice(0, cantidad));
+                response.status(200).json({ status: 'success', response: products.slice(0, cantidad) });
             }
         } else {
-            response.json(products);
+            response.status(200).json({ status: 'success', response: products });
         }
     } catch(error) {
         response.status(500).json(new Result(false, error, [], null));
@@ -54,7 +54,7 @@ router.get('/:pid', async (request, response) => {
             const product = result.getInnerObject();
 
             if (product) {
-                response.json(product);
+                response.status(200).json({ status: 'success', response: product });
             } else {
                 response.status(404).json(new Result(false, "Producto no encontrado", [], null));
             }
@@ -77,7 +77,7 @@ router.post('/', async (request, response) => {
             return;
         }
 
-        response.json(result.getInnerObject());
+        response.status(200).json({ status: 'success', response: result.getInnerObject() });
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));
     }
@@ -96,7 +96,7 @@ router.put('/', async (request, response) => {
             return;
         }
 
-        response.json(result.getInnerObject());
+        response.status(200).json({ status: 'success', response: result.getInnerObject() });
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));
     }
@@ -126,7 +126,7 @@ router.delete('/:pid', async (request, response) => {
                 return;
             }
 
-            response.json({ message: "El producto se eliminó con éxito." });
+            response.status(200).json({ status: 'success', response: "El producto se eliminó con éxito." });
         }
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));

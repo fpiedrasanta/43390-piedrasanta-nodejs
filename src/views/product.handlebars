@@ -1,0 +1,63 @@
+<div class="container mt-5">
+    {{#if isNew}}
+        <h2 id="form_title">Nuevo Producto</h2>
+    {{else}}
+        <h2 id="form_title">Editar Producto</h2>
+    {{/if}}
+    
+    <form id="product_form">
+        <input type="hidden" id="id" value="{{id}}">
+        <div class="form-group">
+            <label for="title">Título:</label>
+            <input type="text" 
+                   class="form-control" 
+                   id="title" 
+                   placeholder="Ingrese el título"
+                   value="{{title}}">
+        </div>
+        <div class="form-group">
+            <label for="description">Descripción:</label>
+            <textarea class="form-control" 
+                      id="description" 
+                      rows="3" 
+                      placeholder="Ingrese la descripción">{{description}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="price">Precio:</label>
+            <input type="number" 
+                   class="form-control" 
+                   id="price" 
+                   placeholder="Ingrese el precio"
+                   value="{{price}}">
+        </div>
+        <div class="form-group">
+            <label for="thumbnail">Imagen:</label>
+            <input type="text" 
+                   class="form-control" 
+                   id="thumbnail" 
+                   placeholder="Ingrese la URL de la imagen"
+                   value="{{thumbnail}}">
+        </div>
+        <div class="form-group">
+            <label for="code">Código:</label>
+            <input type="text" 
+                   class="form-control" 
+                   id="code" 
+                   placeholder="Ingrese el código"
+                   value="{{code}}">
+        </div>
+        <div class="form-group">
+            <label for="stock">Stock:</label>
+            <input type="number" 
+                   class="form-control" 
+                   id="stock" 
+                   placeholder="Ingrese el stock"
+                   value="{{stock}}">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Producto</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/product.js"></script>

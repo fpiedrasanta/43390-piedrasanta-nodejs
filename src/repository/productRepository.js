@@ -62,7 +62,7 @@ export default class ProductRepository {
         try {
 
             const products = await this.getProducts();
-            const newProducts = products.filter(p => p.id !== product.id);
+            const newProducts = products.filter(p => p.id != parseInt(product.id));
 
             newProducts.push(product);
 
@@ -81,7 +81,7 @@ export default class ProductRepository {
         try {
 
             const products = await this.getProducts();
-            const product = products.find(p => p.id == id);
+            const product = products.find(p => p.id == parseInt(id));
 
             if(product)
                 return Product.fromObject(product);
@@ -99,7 +99,7 @@ export default class ProductRepository {
         try {
 
             const products = await this.getProducts();
-            const newProducts = products.filter(p => p.id != id);
+            const newProducts = products.filter(p => p.id != parseInt(id));
 
             await this.file.write(JSON.stringify(newProducts, null, '\t'));
 

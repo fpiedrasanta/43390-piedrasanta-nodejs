@@ -58,7 +58,7 @@ export default class CartRepository {
         try {
 
             const carts = await this.getCarts();
-            const newCarts = carts.filter(p => p.id !== cart.id);
+            const newCarts = carts.filter(p => p.id !== parseInt(cart.id));
 
             newCarts.push(cart);
 
@@ -77,7 +77,7 @@ export default class CartRepository {
         try {
 
             const carts = await this.getCarts();
-            const cart = carts.find(p => p.id == id);
+            const cart = carts.find(p => p.id == parseInt(id));
 
             if(cart)
                 return Cart.fromObject(cart);
@@ -97,7 +97,7 @@ export default class CartRepository {
         try {
 
             const carts = await this.getCarts();
-            const newCarts = carts.filter(p => p.id != id);
+            const newCarts = carts.filter(p => p.id != parseInt(id));
 
             await this.file.write(JSON.stringify(newCarts, null, '\t'));
 

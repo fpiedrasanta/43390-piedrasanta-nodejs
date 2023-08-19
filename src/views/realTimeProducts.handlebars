@@ -1,0 +1,37 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between mb-3">
+    <h2>Lista de Productos</h2>
+    <a href="/product" 
+       class="btn btn-primary"
+       style="height: 38px; padding-top: 7px;">
+        <i class="fa fa-plus"></i>
+    </a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="product_list">
+        {{#each products}}
+            <tr id=product_{{this.id}}>
+                <td style="vertical-align: middle;">{{this.title}}</td>
+                <td style="vertical-align: middle;">{{this.description}}</td>
+                <td style="vertical-align: middle;">{{this.price}}</td>
+                <td>
+                    <button onclick="deleteProduct({{this.id}})" class="btn btn-danger eliminar"><i class="fa fa-trash"></i></button>
+                    <a  href="/product/{{this.id}}" class="btn btn-primary editar"><i class="fa fa-pencil"></i></a>
+                </td>
+            </tr>
+        {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
