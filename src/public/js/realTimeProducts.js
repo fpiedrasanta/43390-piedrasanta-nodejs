@@ -6,12 +6,12 @@ socket.on ('new_product', data => {
     let productList = document.getElementById("product_list");
     
     const file = `
-        <tr id=product_${data.id}>
+        <tr id=product_${data._id}>
             <td style="vertical-align: middle;">${data.title}</td>
             <td style="vertical-align: middle;">${data.description}</td>
             <td style="vertical-align: middle;">$${data.price}</td>
             <td>
-                <button  onclick="deleteProduct(${data.id})" class="btn btn-danger eliminar"><i class="fa fa-trash"></i></button>
+                <button  onclick="deleteProduct(${data._id})" class="btn btn-danger eliminar"><i class="fa fa-trash"></i></button>
                 <button class="btn btn-primary editar"><i class="fa fa-pencil"></i></button>
             </td>
         </tr>
@@ -30,7 +30,7 @@ socket.on ('new_product', data => {
 });
 
 socket.on ('edit_product', data => {
-    let product = document.getElementById("product_" + data.id);
+    let product = document.getElementById("product_" + data._id);
     
     product.innerHTML = `
         <td style="vertical-align: middle;">${data.title}</td>
@@ -53,7 +53,7 @@ socket.on ('edit_product', data => {
 
 socket.on ('delete_product', data => {
     let productList = document.getElementById("product_list");
-    let product = document.getElementById("product_" + data.id);
+    let product = document.getElementById("product_" + data._id);
     
     productList.removeChild(product);
 
@@ -68,5 +68,5 @@ socket.on ('delete_product', data => {
 });
 
 function deleteProduct(id) {
-    socket.emit('delete_product', { id: id });
+    socket.emit('delete_product', { _id: id });
 }

@@ -18,13 +18,13 @@
     </thead>
     <tbody id="product_list">
         {{#each products}}
-            <tr id=product_{{this.id}}>
+            <tr id="product_{{this._id}}">
                 <td style="vertical-align: middle;">{{this.title}}</td>
                 <td style="vertical-align: middle;">{{this.description}}</td>
                 <td style="vertical-align: middle;">{{this.price}}</td>
                 <td>
-                    <button onclick="deleteProduct({{this.id}})" class="btn btn-danger eliminar"><i class="fa fa-trash"></i></button>
-                    <a  href="/product/{{this.id}}" class="btn btn-primary editar"><i class="fa fa-pencil"></i></a>
+                    <button onclick="deleteProduct('{{this._id}}')" class="btn btn-danger eliminar"><i class="fa fa-trash"></i></button>
+                    <a  href="/product/{{this._id}}" class="btn btn-primary editar"><i class="fa fa-pencil"></i></a>
                 </td>
             </tr>
         {{/each}}

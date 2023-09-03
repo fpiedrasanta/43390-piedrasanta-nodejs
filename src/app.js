@@ -1,13 +1,14 @@
 import express from "express";
 import { Server } from 'socket.io';
-
 import handlebars from 'express-handlebars';
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 
-import ProductManager from "./controller/productManager.js";
+import ProductManager from "./dao/mongo/managers/productManager.js";
+
+import mongoose from 'mongoose';
 
 import __dirname from './utils.js';
 
@@ -28,6 +29,8 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
+const connection = mongoose.connect("mongodb+srv://fede:fede@cluster0.pttzmsk.mongodb.net/ecommerce?retryWrites=true&w=majority");
+
 const server = app.listen(port, () => {
     console.log(`Servidor http escuchando en puerto ${server.address().port}`);
 });
@@ -38,7 +41,7 @@ const io = new Server(server);
 
 io.on ('connection', socket =>{
     socket.on('delete_product', async data => {
-        const pid = data.id;
+        const pid = data._id;
 
         const productManager = new ProductManager('.');
         let result = await productManager.getProductById(pid);

@@ -1,7 +1,7 @@
-import CartManager from "../controller/cartManager.js";
+import CartManager from "../dao/mongo/managers/cartManager.js";
 import { Router } from "express";
 import Result from "../helper/result.js";
-import ProductManager from "../controller/productManager.js";
+import ProductManager from "../dao/mongo/managers/productManager.js";
 
 const router = Router();
 
@@ -26,27 +26,25 @@ router.post('/', async (request, response) => {
 
 router.get('/:cid', async (request, response) => {
     try {
-        const cid = parseInt(request.params.cid, 10);
+        
+        const cid = request.params.cid;
 
-        if(isNaN(cid)) {
-            response.status(400).json(new Result(false, "El parámetro no es un número", [], null));
-        } else {
-            const cartManager = new CartManager('.');
-            const result = await cartManager.getCartById(cid);
+        const cartManager = new CartManager('.');
+        const result = await cartManager.getCartById(cid);
 
-            if(!result.isSuccess()) {
-                response.status(500).json(result);
-                return;
-            }
-
-            const cart = result.getInnerObject();
-
-            if (cart) {
-                response.status(200).json({ status: 'success', response: cart });
-            } else {
-                response.status(404).json(new Result(false, "Carrito no encontrado", [], null));
-            }
+        if(!result.isSuccess()) {
+            response.status(500).json(result);
+            return;
         }
+
+        const cart = result.getInnerObject();
+
+        if (cart) {
+            response.status(200).json({ status: 'success', response: cart });
+        } else {
+            response.status(404).json(new Result(false, "Carrito no encontrado", [], null));
+        }
+
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));
     }
@@ -54,14 +52,9 @@ router.get('/:cid', async (request, response) => {
 
 router.post('/:cid/product/:pid', async (request, response) => {
     try {
-        const cid = parseInt(request.params.cid, 10);
-        const pid = parseInt(request.params.pid, 10);
+        const cid = request.params.cid;
+        const pid = request.params.pid;
         
-        if(isNaN(cid) || isNaN(pid))  {
-            response.status(400).json(new Result(false, "Alguno de los parámetros no es un número", [], null));
-            return;
-        }
-
         const cartManager = new CartManager('.');
         const productManager = new ProductManager('.');
 
@@ -82,7 +75,10 @@ router.post('/:cid/product/:pid', async (request, response) => {
         const cart = cartResult.getInnerObject();
         const product = productResult.getInnerObject();
         
-        cart.addCartDetail(product, 1);
+        cart.products.push({
+            product: pid,
+            quantity: 1
+        });
         
         const updateResult = await cartManager.updateCart(cart);
         

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import ProductManager from '../controller/productManager.js';
+import ProductManager from '../dao/mongo/managers/productManager.js';
 
 const router = Router();
 
@@ -35,7 +35,7 @@ router.get('/product', async (req, res) => {
 });
 
 router.get('/product/:pid', async (req, res) => {
-    const pid = parseInt(req.params.pid, 10);
+    const pid = req.params.pid;
 
     const productManager = new ProductManager('.');
     const result = await productManager.getProductById(pid);

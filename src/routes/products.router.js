@@ -1,4 +1,4 @@
-import ProductManager from "../controller/productManager.js";
+import ProductManager from "../dao/mongo/managers/productManager.js";
 import { Router } from "express";
 import Result from "../helper/result.js";
 
@@ -38,26 +38,22 @@ router.get('/', async (request, response) => {
 
 router.get('/:pid', async (request, response) => {
     try {
-        const pid = parseInt(request.params.pid, 10);
+        const pid = request.params.pid;
 
-        if(isNaN(pid)) {
-            response.status(400).json(new Result(false, "El parámetro no es un número", [], null));
+        const productManager = new ProductManager('.');
+        const result = await productManager.getProductById(pid);
+
+        if(!result.isSuccess()) {
+            response.status(500).json(result);
+            return;
+        }
+
+        const product = result.getInnerObject();
+
+        if (product) {
+            response.status(200).json({ status: 'success', response: product });
         } else {
-            const productManager = new ProductManager('.');
-            const result = await productManager.getProductById(pid);
-
-            if(!result.isSuccess()) {
-                response.status(500).json(result);
-                return;
-            }
-
-            const product = result.getInnerObject();
-
-            if (product) {
-                response.status(200).json({ status: 'success', response: product });
-            } else {
-                response.status(404).json(new Result(false, "Producto no encontrado", [], null));
-            }
+            response.status(404).json(new Result(false, "Producto no encontrado", [], null));
         }
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));
@@ -104,30 +100,26 @@ router.put('/', async (request, response) => {
 
 router.delete('/:pid', async (request, response) => {
     try {
-        const pid = parseInt(request.params.pid, 10);
+        const pid = request.params.pid;
 
-        if(isNaN(pid)) {
-            response.status(400).json(new Result(false, "El parámetro no es un número", [], null));
-        } else {
-            const productManager = new ProductManager('.');
-            let result = await productManager.getProductById(pid);
+        const productManager = new ProductManager('.');
+        let result = await productManager.getProductById(pid);
 
-            if(!result.isSuccess()) {
-                response.status(500).json(result);
-                return;
-            }
-
-            const product = result.getInnerObject();
-
-            result = await productManager.deleteProduct(product);
-
-            if(!result.isSuccess()) {
-                response.status(500).json(result);
-                return;
-            }
-
-            response.status(200).json({ status: 'success', response: "El producto se eliminó con éxito." });
+        if(!result.isSuccess()) {
+            response.status(500).json(result);
+            return;
         }
+
+        const product = result.getInnerObject();
+
+        result = await productManager.deleteProduct(product);
+
+        if(!result.isSuccess()) {
+            response.status(500).json(result);
+            return;
+        }
+
+        response.status(200).json({ status: 'success', response: "El producto se eliminó con éxito." });
     } catch (error) {
         response.status(500).json(new Result(false, error, [], null));
     }
