@@ -5,11 +5,14 @@ import Result from "../helper/result.js";
 const router = Router();
 
 router.get('/', async (request, response) => {
-    try{
+    try {
         const limit = request.query.limit; // Obtenemos el valor del parámetro "limit" de la URL
-        
+        const page = request.query.page;
+        const sort = request.query.sort;
+        const query = request.query.query;
+
         const productManager = new ProductManager('.');
-        const result = await productManager.getProducts();
+        const result = await productManager.getProducts(page, limit, sort, query);
         
         if(!result.isSuccess()) {
             response.status(500).json(result);
@@ -18,19 +21,20 @@ router.get('/', async (request, response) => {
 
         const products = result.getInnerObject();
 
-        if (limit) {
-            const cantidad = parseInt(limit, 10); // Parseamos el límite a un número entero
-            
-            if(isNaN(cantidad)) {
-                response.status(400).json(new Result(false, "El parámetro no es un número", [], null));
-            } else if(cantidad < 0) {
-                response.status(400).json(new Result(false, "El número debe ser un valor numérico mayor a 0", [], null));
-            } else {
-                response.status(200).json({ status: 'success', response: products.slice(0, cantidad) });
-            }
-        } else {
-            response.status(200).json({ status: 'success', response: products });
-        }
+        const protocol = request.protocol; // Obtenemos el protocolo automáticamente
+        const hostname = request.headers.host; // Obtenemos el hostname automáticamente
+        
+        response.status(200).json({ 
+            status: 'success', 
+            response: products.docs,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: `${protocol}://${hostname}/api/products?page=${(products.prevPage||1)}&limit=${(limit||10)}&sort=${(sort||'asc')}&query=${(query||'')}`,
+            nextLink: `${protocol}://${hostname}/api/products?page=${(products.nextPage||1)}&limit=${(limit||10)}&sort=${(sort||'asc')}&query=${(query||'')}`
+        });
     } catch(error) {
         response.status(500).json(new Result(false, error, [], null));
     }

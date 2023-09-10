@@ -9,9 +9,9 @@ export default class ProductManager {
         this.productRepository = new ProductRepository();
     }
 
-    getProducts = async () => {
+    getProducts = async (page, limit, sort, query) => {
         try {
-            const products = await this.productRepository.getProducts();
+            const products = await this.productRepository.getProducts(page, limit, sort, query);
             return new Result(true, "success", [], products);
         } catch (error) {
             return new Result(false, error, [], null);
@@ -21,9 +21,9 @@ export default class ProductManager {
     validateProduct = async (product) => {
         let errors = [];
         
-        const products = (await this.getProducts()).getInnerObject();
+        const exists = await this.productRepository.exists(product.code, product._id);
 
-        if(products.some(x => x.code === product.code && x._id != product._id))
+        if(exists)
         {
             errors.push(`Ya existe un producto con código ${product.code}`);
         }

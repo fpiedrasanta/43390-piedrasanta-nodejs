@@ -1,13 +1,20 @@
-{{#each products}}
-    <hr>
-    <div>
-        <div><b>id: </b>{{this._id}}</div>
-		<div><b>title: </b>{{this.title}}</div>
-		<div><b>description: </b>{{this.description}}</div>
-		<div><b>price: </b>{{this.price}}</div>
-		<div><b>thumbnail: </b>{{this.thumbnail}}</div>
-		<div><b>code: </b>{{this.code}}</div>
-		<div><b>stock: </b>{{this.stock}}</div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>HOME</h2>
     </div>
-    <hr>
-{{/each}}
+    {{#each products}}
+        <div><strong>{{this.title}}</strong></td>
+        <div>Descripción: <i>{{this.description}}</i></div>
+        <div>${{this.price}}</div>
+		<button>Agregar al carrito</button>
+		<a href="/products/{{this._id}}"><button>Ver detalles</button></a>
+        <hr>
+    {{/each}}
+</div>
+
+{{#if hasPrevPage}}
+    <a href="{{prevLink}}"><button>Anterior</button></a>
+{{/if}}
+{{#if hasNextPage}}
+    <a href="{{nextLink}}"><button>Siguiente</button></a>
+{{/if}}

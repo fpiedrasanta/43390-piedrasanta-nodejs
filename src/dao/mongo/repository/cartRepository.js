@@ -5,7 +5,7 @@ export default class CartRepository {
 
     getCarts = async () => {
         try {
-            return await cartModel.find();
+            return await cartModel.find().lean();
         } catch(error) {
             throw new Error(
                 `Se generó un error en la lectura de los carritos: ${error}`
@@ -39,7 +39,7 @@ export default class CartRepository {
     
     getCartById = async (id) => {
         try {
-            return await cartModel.findById(id);          
+            return await cartModel.findById(id).populate('products.product').lean();
         } catch (error) {
 
             throw new Error(

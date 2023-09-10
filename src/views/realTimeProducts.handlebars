@@ -30,6 +30,12 @@
         {{/each}}
     </tbody>
   </table>
+  {{#if hasPrevPage}}
+    <a href="{{prevLink}}"><button>Anterior</button></a>
+  {{/if}}
+  {{#if hasNextPage}}
+    <a href="{{nextLink}}"><button>Siguiente</button></a>
+  {{/if}}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

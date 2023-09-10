@@ -1,0 +1,12 @@
+<div class="container mt-5">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Tú carrito</h2>
+    </div>
+    {{#each cart.products}}
+        <div><strong>{{this.product.title}}</strong></td>
+        <div>Descripción: <i>{{this.product.description}}</i></div>
+        <div>${{this.product.price}}</div>
+        <div>Cantidad: {{this.quantity}}</div>
+        <hr>
+    {{/each}}
+</div>

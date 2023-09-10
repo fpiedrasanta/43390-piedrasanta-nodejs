@@ -26,7 +26,6 @@ router.post('/', async (request, response) => {
 
 router.get('/:cid', async (request, response) => {
     try {
-        
         const cid = request.params.cid;
 
         const cartManager = new CartManager('.');
