@@ -1,6 +1,10 @@
 <div class="container mt-5">
+    <div>
+        ¡Hola {{firstName}} {{lastName}}!
+    </div>
+    <br><br>
     <div class="d-flex justify-content-between mb-3">
-        <h2>HOME</h2>
+        <h2>Productos</h2>
     </div>
     {{#each products}}
         <div><strong>{{this.title}}</strong></td>
@@ -18,3 +22,9 @@
 {{#if hasNextPage}}
     <a href="{{nextLink}}"><button>Siguiente</button></a>
 {{/if}}
+
+<br><br>
+
+<div>
+    <a href="/logout"><button>Salir</button></a>
+</div>

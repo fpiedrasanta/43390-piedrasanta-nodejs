@@ -15,8 +15,7 @@ router.get('/', async (request, response) => {
         const result = await productManager.getProducts(page, limit, sort, query);
         
         if(!result.isSuccess()) {
-            response.status(500).json(result);
-            return;
+            return response.status(result.getCode()).json(result);
         }
 
         const products = result.getInnerObject();
@@ -36,7 +35,13 @@ router.get('/', async (request, response) => {
             nextLink: `${protocol}://${hostname}/api/products?page=${(products.nextPage||1)}&limit=${(limit||10)}&sort=${(sort||'asc')}&query=${(query||'')}`
         });
     } catch(error) {
-        response.status(500).json(new Result(false, error, [], null));
+        return response.status(500).json(new Result(
+            500,
+            false, 
+            error, 
+            [], 
+            null
+        ));
     }
 });
 
@@ -48,19 +53,28 @@ router.get('/:pid', async (request, response) => {
         const result = await productManager.getProductById(pid);
 
         if(!result.isSuccess()) {
-            response.status(500).json(result);
-            return;
+            return response.status(result.getCode()).json(result);
         }
 
         const product = result.getInnerObject();
 
         if (product) {
-            response.status(200).json({ status: 'success', response: product });
+            return response.status(200).json({ status: 'success', response: product });
         } else {
-            response.status(404).json(new Result(false, "Producto no encontrado", [], null));
+            response.status(404).json(new Result(
+                404,
+                false, 
+                "Producto no encontrado", 
+                [], 
+                null));
         }
     } catch (error) {
-        response.status(500).json(new Result(false, error, [], null));
+        return response.status(500).json(new Result(
+            500,
+            false, 
+            error, 
+            [], 
+            null));
     }
 });
 
@@ -73,13 +87,21 @@ router.post('/', async (request, response) => {
         const result = await productManager.addProduct(product);
 
         if(!result.isSuccess()) {
-            response.status(500).json(result);
-            return;
+            return response.status(result.getCode()).json(result);
         }
 
-        response.status(200).json({ status: 'success', response: result.getInnerObject() });
+        return response.status(200).json({ 
+            status: 'success', 
+            response: result.getInnerObject() 
+        });
     } catch (error) {
-        response.status(500).json(new Result(false, error, [], null));
+        return response.status(500).json(new Result(
+            500,
+            false, 
+            error, 
+            [], 
+            null
+        ));
     }
 });
 
@@ -92,13 +114,21 @@ router.put('/', async (request, response) => {
         const result = await productManager.updateProduct(product);
 
         if(!result.isSuccess()) {
-            response.status(500).json(result);
-            return;
+            return response.status(result.getCode()).json(result);
         }
 
-        response.status(200).json({ status: 'success', response: result.getInnerObject() });
+        return response.status(200).json({ 
+            status: 'success', 
+            response: result.getInnerObject() 
+        });
     } catch (error) {
-        response.status(500).json(new Result(false, error, [], null));
+        return response.status(500).json(new Result(
+            500,
+            false, 
+            error, 
+            [], 
+            null
+        ));
     }
 });
 
@@ -110,8 +140,7 @@ router.delete('/:pid', async (request, response) => {
         let result = await productManager.getProductById(pid);
 
         if(!result.isSuccess()) {
-            response.status(500).json(result);
-            return;
+            return response.status(result.getCode()).json(result);
         }
 
         const product = result.getInnerObject();
@@ -119,13 +148,21 @@ router.delete('/:pid', async (request, response) => {
         result = await productManager.deleteProduct(product);
 
         if(!result.isSuccess()) {
-            response.status(500).json(result);
-            return;
+            return response.status(result.getCode()).json(result);
         }
 
-        response.status(200).json({ status: 'success', response: "El producto se eliminó con éxito." });
+        response.status(200).json({ 
+            status: 'success', 
+            response: "El producto se eliminó con éxito." 
+        });
     } catch (error) {
-        response.status(500).json(new Result(false, error, [], null));
+        response.status(500).json(new Result(
+            500,
+            false, 
+            error, 
+            [], 
+            null
+        ));
     }
 });
 

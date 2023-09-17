@@ -11,9 +11,9 @@ export default class CartManager {
     getCarts = async () => {
         try {
             const carts = await this.cartRepository.getCarts();
-            return new Result(true, "success", [], carts);
+            return new Result(200, true, "success", [], carts);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -21,9 +21,14 @@ export default class CartManager {
         try {
             await this.cartRepository.addCart(cart);
 
-            return new Result(true, "El carrito se agregó con éxito", [], cart);
+            return new Result(
+                200, 
+                true, 
+                "El carrito se agregó con éxito", 
+                [], 
+                cart);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -31,12 +36,17 @@ export default class CartManager {
         try {
             const cart = await this.cartRepository.getCartById(id);
             if(cart) {
-                return new Result(true, "success", [], cart);
+                return new Result(200, true, "success", [], cart);
             } else {
-                return new Result(false, "No se encontró el carrito", [], null);
+                return new Result(
+                    404, 
+                    false, 
+                    "No se encontró el carrito", 
+                    [], 
+                    null);
             }
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -45,14 +55,24 @@ export default class CartManager {
             const dbCart = await this.cartRepository.getCartById(cart._id);
 
             if(dbCart == null) {
-                return new Result(false, "El carrito no existe en la base de datos", [], null);
+                return new Result(
+                    404,
+                    false, 
+                    "El carrito no existe en la base de datos", 
+                    [], 
+                    null);
             }
 
             await this.cartRepository.updateCart(cart);
 
-            return new Result(true, "El carrito se actualizó con éxito", [], cart);
+            return new Result(
+                200, 
+                true, 
+                "El carrito se actualizó con éxito", 
+                [], 
+                cart);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -61,14 +81,22 @@ export default class CartManager {
             const dbCart = await this.cartRepository.getCartById(cart._id);
 
             if(dbCart == null) {
-                return new Result(false, "El carrito no existe en la base de datos", []);
+                return new Result(
+                    404, 
+                    false, 
+                    "El carrito no existe en la base de datos", 
+                    []);
             }
 
             await this.cartRepository.deleteCart(cart._id);
 
-            return new Result(true, "El carrito se eliminó con éxito", []);
+            return new Result(
+                200, 
+                true, 
+                "El carrito se eliminó con éxito", 
+                []);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 }

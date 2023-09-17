@@ -218,7 +218,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/carts/64f3d759dd6d2e095d28b187",
+					"raw": "localhost:8080/api/carts/:cid",
 					"host": [
 						"localhost"
 					],
@@ -226,7 +226,13 @@
 					"path": [
 						"api",
 						"carts",
-						"64f3d759dd6d2e095d28b187"
+						":cid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "64f3d759dd6d2e095d28b187"
+						}
 					]
 				}
 			},
@@ -238,7 +244,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/carts/64f3d759dd6d2e095d28b187/product/64f3d720dd6d2e095d28b182",
+					"raw": "localhost:8080/api/carts/:cid/product/:pid",
 					"host": [
 						"localhost"
 					],
@@ -246,9 +252,283 @@
 					"path": [
 						"api",
 						"carts",
-						"64f3d759dd6d2e095d28b187",
+						":cid",
 						"product",
-						"64f3d720dd6d2e095d28b182"
+						":pid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "64f3d759dd6d2e095d28b187"
+						},
+						{
+							"key": "pid",
+							"value": "64f3d720dd6d2e095d28b182"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a product from a cart",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/carts/:cid/products/:pid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						":cid",
+						"products",
+						":pid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "64f3d759dd6d2e095d28b187"
+						},
+						{
+							"key": "pid",
+							"value": "64f3d720dd6d2e095d28b182"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add array products",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"products\": [{\r\n        \"product\": \"64f3d720dd6d2e095d28b182\",\r\n        \"quantity\": 1\r\n    }, {\r\n        \"product\": \"64fd064737f559e5adbea6b0\",\r\n        \"quantity\": 1\r\n    }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/carts/:cid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						":cid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "64f3d759dd6d2e095d28b187"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vaciar carrito",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/carts/:cid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						":cid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "64f3d759dd6d2e095d28b187"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update quantity",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"quantity\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/carts/:cid/products/:pid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						":cid",
+						"products",
+						":pid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "64f3d759dd6d2e095d28b187"
+						},
+						{
+							"key": "pid",
+							"value": "64f3d720dd6d2e095d28b182"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Federico\",\r\n    \"lastName\": \"Piedrasanta\",\r\n    \"email\": \"fede.piedrasanta@gmail.com\",\r\n    \"age\": 42,\r\n    \"password\": \"fede\",\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/users/:uid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						":uid"
+					],
+					"variable": [
+						{
+							"key": "uid",
+							"value": "6505c54b79efc13dc5c38b06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"José\",\r\n    \"lastName\": \"Inventado\",\r\n    \"email\": \"jose@gmail.com\",\r\n    \"age\": 36,\r\n    \"password\": \"jose\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\": \"fede.piedrasanta@gmail.com\",\r\n    \"password\": \"fede\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/users/auth",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"auth"
 					]
 				}
 			},

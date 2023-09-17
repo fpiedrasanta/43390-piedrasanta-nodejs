@@ -5,6 +5,10 @@ import CartManager from '../dao/mongo/managers/cartManager.js';
 const router = Router();
 
 router.get('/', async (req, res) => {
+    if(!req.session.user) {
+        return res.redirect("/login");
+    }
+
     const limit = req.query.limit; // Obtenemos el valor del parámetro "limit" de la URL
     const page = req.query.page;
     const sort = req.query.sort;
@@ -27,11 +31,17 @@ router.get('/', async (req, res) => {
         hasPrevPage: products.hasPrevPage,
         hasNextPage: products.hasNextPage,
         prevLink: `${protocol}://${hostname}?page=${(products.prevPage||1)}&limit=${(limit||10)}&sort=${(sort||'asc')}&query=${(query||'')}`,
-        nextLink: `${protocol}://${hostname}?page=${(products.nextPage||1)}&limit=${(limit||10)}&sort=${(sort||'asc')}&query=${(query||'')}`
+        nextLink: `${protocol}://${hostname}?page=${(products.nextPage||1)}&limit=${(limit||10)}&sort=${(sort||'asc')}&query=${(query||'')}`,
+        firstName: req.session.user.firstName,
+        lastName: req.session.user.lastName
     });
 });
 
 router.get('/products/:pid', async (req, res) => {
+    if(!req.session.user) {
+        return res.redirect("/login");
+    }
+
     const pid = req.params.pid;
 
     const productManager = new ProductManager('.');
@@ -42,6 +52,10 @@ router.get('/products/:pid', async (req, res) => {
 });
 
 router.get('/realtimeproducts', async (req, res) => {
+    if(!req.session.user) {
+        return res.redirect("/login");
+    }
+
     const limit = req.query.limit; // Obtenemos el valor del parámetro "limit" de la URL
     const page = req.query.page;
     const sort = req.query.sort;
@@ -69,6 +83,10 @@ router.get('/realtimeproducts', async (req, res) => {
 });
 
 router.get('/product', async (req, res) => {
+    if(!req.session.user) {
+        return res.redirect("/login");
+    }
+
     res.render('product', {
         "id": 0,
         "title": "",
@@ -82,6 +100,10 @@ router.get('/product', async (req, res) => {
 });
 
 router.get('/product/:pid', async (req, res) => {
+    if(!req.session.user) {
+        return res.redirect("/login");
+    }
+
     const pid = req.params.pid;
 
     const productManager = new ProductManager('.');
@@ -94,6 +116,10 @@ router.get('/product/:pid', async (req, res) => {
 });
 
 router.get('/carts/:cid', async (req, res) => {
+    if(!req.session.user) {
+        return res.redirect("/login");
+    }
+    
     const cid = req.params.cid;
 
     const cartManager = new CartManager('.');
@@ -101,6 +127,29 @@ router.get('/carts/:cid', async (req, res) => {
     const cart = result.getInnerObject();
     
     res.render('cart', { cart: cart });
+});
+
+router.get('/login', async(req, res) => {
+    res.render('login');
+});
+
+router.get('/register', async(req, res) => {
+    res.render('register');
+});
+
+router.get('/logout', async(req, res) => {
+    if(!req.session.user) {
+        return res.redirect("/login");
+    }
+
+    req.session.destroy(error => {
+        if(error) {
+            console.log(error);
+            return res.redirect("/login");
+        } else {
+            return res.redirect("/login");
+        }
+    });
 });
 
 export default router;

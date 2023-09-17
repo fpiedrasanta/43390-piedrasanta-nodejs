@@ -1,9 +1,13 @@
 import express from "express";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
+import usersRouter from "./routes/users.router.js";
+
 import viewsRouter from "./routes/views.router.js";
 
 import ProductManager from "./dao/mongo/managers/productManager.js";
@@ -19,6 +23,16 @@ const port = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://fede:fede@cluster0.pttzmsk.mongodb.net/ecommerce?retryWrites=true&w=majority",
+        ttl: (20 * 60)
+    }),
+    secret: "fede",
+    resave: false,
+    saveUninitialized: false
+}));
+
 app.use(express.static(`${__dirname}/public`));
 
 app.engine('handlebars', handlebars.engine());
@@ -27,6 +41,7 @@ app.set('view engine', 'handlebars');
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/api/users", usersRouter);
 app.use("/", viewsRouter);
 
 const connection = mongoose.connect("mongodb+srv://fede:fede@cluster0.pttzmsk.mongodb.net/ecommerce?retryWrites=true&w=majority");

@@ -12,9 +12,9 @@ export default class ProductManager {
     getProducts = async (page, limit, sort, query) => {
         try {
             const products = await this.productRepository.getProducts(page, limit, sort, query);
-            return new Result(true, "success", [], products);
+            return new Result(200, true, "success", [], products);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -61,14 +61,23 @@ export default class ProductManager {
 
             if(errors.length > 0)
             {
-                return new Result(false, 'Error al agregar un producto', errors, null);
+                return new Result(
+                    400, 
+                    false, 
+                    'Error al agregar un producto', 
+                    errors, 
+                    null);
             }
 
             const newProduct = await this.productRepository.addProduct(product);
 
-            return new Result(true, "El producto se agregó con éxito", [], newProduct);
+            return new Result(200, 
+                true, 
+                "El producto se agregó con éxito", 
+                [], 
+                newProduct);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -76,12 +85,22 @@ export default class ProductManager {
         try {
             const product = await this.productRepository.getProductById(id);
             if(product) {
-                return new Result(true, "success", [], product);
+                return new Result(
+                    200, 
+                    true, 
+                    "success", 
+                    [], 
+                    product);
             } else {
-                return new Result(false, "No se encontró el producto", [], null);
+                return new Result(
+                    404, 
+                    false, 
+                    "No se encontró el producto", 
+                    [], 
+                    null);
             }
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -90,21 +109,36 @@ export default class ProductManager {
             const dbProduct = await this.productRepository.getProductById(product._id);
 
             if(dbProduct == null) {
-                return new Result(false, "El producto no existe en la base de datos", [], null);
+                return new Result(
+                    404, 
+                    false, 
+                    "El producto no existe en la base de datos", 
+                    [], 
+                    null);
             }
 
             const errors = await this.validateProduct(product);
 
             if(errors.length > 0)
             {
-                return new Result(false, 'No se pudo actualizar el producto', errors, null);
+                return new Result(
+                    400,
+                    false, 
+                    'No se pudo actualizar el producto', 
+                    errors, 
+                    null);
             }
 
             await this.productRepository.updateProduct(product);
 
-            return new Result(true, "El producto se actualizó con éxito", [], product);
+            return new Result(
+                200, 
+                true, 
+                "El producto se actualizó con éxito", 
+                [], 
+                product);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 
@@ -113,14 +147,22 @@ export default class ProductManager {
             const dbProduct = await this.productRepository.getProductById(product._id);
 
             if(dbProduct == null) {
-                return new Result(false, "El producto no existe en la base de datos", []);
+                return new Result(
+                    404,
+                    false, 
+                    "El producto no existe en la base de datos", 
+                    []);
             }
 
             await this.productRepository.deleteProduct(product._id);
 
-            return new Result(true, "El producto se eliminó con éxito", []);
+            return new Result(
+                200,
+                true, 
+                "El producto se eliminó con éxito", 
+                []);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(500, false, error, [], null);
         }
     }
 }
