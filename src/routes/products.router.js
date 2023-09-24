@@ -38,7 +38,7 @@ router.get('/', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null
         ));
@@ -72,7 +72,7 @@ router.get('/:pid', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null));
     }
@@ -98,7 +98,7 @@ router.post('/', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null
         ));
@@ -125,7 +125,7 @@ router.put('/', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null
         ));
@@ -159,7 +159,7 @@ router.delete('/:pid', async (request, response) => {
         response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null
         ));

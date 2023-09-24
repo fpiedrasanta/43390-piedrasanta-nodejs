@@ -25,7 +25,7 @@ router.post('/', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null));
     }
@@ -62,7 +62,7 @@ router.get('/:cid', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null));
     }
@@ -129,7 +129,7 @@ router.post('/:cid/product/:pid', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null));
     }
@@ -181,7 +181,7 @@ router.delete("/:cid/products/:pid", async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false,
-            error,
+            error.message,
             [],
             null
         ));
@@ -220,7 +220,7 @@ router.put("/:cid", async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false,
-            error,
+            error.message,
             [],
             null
         ));
@@ -274,7 +274,7 @@ router.put("/:cid/products/:pid", async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false,
-            error,
+            error.message,
             [],
             null
         ));
@@ -313,7 +313,7 @@ router.delete("/:cid", async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false,
-            error,
+            error.message,
             [],
             null
         ));

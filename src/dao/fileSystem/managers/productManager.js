@@ -14,7 +14,7 @@ export default class ProductManager {
             const products = await this.productRepository.getProducts();
             return new Result(true, "success", [], products);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(false, error.message, [], null);
         }
     }
 
@@ -68,7 +68,7 @@ export default class ProductManager {
 
             return new Result(true, "El producto se agregó con éxito", [], product);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(false, error.message, [], null);
         }
     }
 
@@ -81,7 +81,7 @@ export default class ProductManager {
                 return new Result(false, "No se encontró el producto", [], null);
             }
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(false, error.message, [], null);
         }
     }
 
@@ -104,7 +104,7 @@ export default class ProductManager {
 
             return new Result(true, "El producto se actualizó con éxito", [], product);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(false, error.message, [], null);
         }
     }
 
@@ -120,7 +120,7 @@ export default class ProductManager {
 
             return new Result(true, "El producto se eliminó con éxito", []);
         } catch (error) {
-            return new Result(false, error, [], null);
+            return new Result(false, error.message, [], null);
         }
     }
 }

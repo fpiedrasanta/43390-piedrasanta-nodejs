@@ -8,6 +8,10 @@ const schema = new mongoose.Schema({
     email: String,
     age: Number,
     password: String,
+    thirdPartyAuth: {
+        type: Boolean,
+        default: false
+    },
     role: {
         type: String,
         enum: ['user', 'admin'],

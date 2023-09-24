@@ -13,7 +13,7 @@ export default class CartManager {
             const carts = await this.cartRepository.getCarts();
             return new Result(200, true, "success", [], carts);
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -28,7 +28,7 @@ export default class CartManager {
                 [], 
                 cart);
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -46,7 +46,7 @@ export default class CartManager {
                     null);
             }
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -72,7 +72,7 @@ export default class CartManager {
                 [], 
                 cart);
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -96,7 +96,7 @@ export default class CartManager {
                 "El carrito se eliminó con éxito", 
                 []);
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 }

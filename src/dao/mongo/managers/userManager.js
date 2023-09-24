@@ -1,5 +1,6 @@
 import UserRepository from "../repository/userRepository.js";
 import Result from "../../../helper/result.js";
+import auth from "../../../services/auth.js";
 
 export default class UserManager {
     #userRepository
@@ -21,7 +22,7 @@ export default class UserManager {
             return new Result(
                 500, 
                 false, 
-                error, 
+                error.message, 
                 [], 
                 null);
         }
@@ -29,16 +30,47 @@ export default class UserManager {
 
     addUser = async (user) => {
         try {
-            await this.userRepository.addUser(user);
+            const {
+                firstName,
+                lastName,
+                email,
+                age,
+                password,
+                role
+            } = user;
+            
+            if(!firstName || !lastName || !email || !password)
+            {
+                return new Result(
+                    400,
+                    false,
+                    "Datos incompletos, debe ingresar nombre, apellido, correo y contraseña",
+                    [],
+                    null
+                );
+            }
+
+            const hashedPassword = await auth.createHash(password);
+
+            const newUser = {
+                firstName,
+                lastName,
+                email,
+                age,
+                password: hashedPassword,
+                role
+            };
+
+            const returnUser = await this.userRepository.addUser(newUser);
 
             return new Result(
                 200, 
                 true, 
                 "El usuario se agregó con éxito", 
                 [], 
-                user);
+                returnUser);
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -61,7 +93,7 @@ export default class UserManager {
                     null);
             }
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -84,7 +116,30 @@ export default class UserManager {
                     null);
             }
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
+        }
+    }
+
+    getUserByEmail = async (userName) => {
+        try {
+            const user = await this.userRepository.getUserByEmail(userName);
+            if(user) {
+                return new Result(
+                    200, 
+                    true, 
+                    "success", 
+                    [], 
+                    user);
+            } else {
+                return new Result(
+                    404, 
+                    false, 
+                    "No se encontró el usuario", 
+                    [], 
+                    null);
+            }
+        } catch (error) {
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -110,7 +165,7 @@ export default class UserManager {
                 [], 
                 user);
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 
@@ -136,7 +191,7 @@ export default class UserManager {
                 [],
                 null);
         } catch (error) {
-            return new Result(500, false, error, [], null);
+            return new Result(500, false, error.message, [], null);
         }
     }
 }

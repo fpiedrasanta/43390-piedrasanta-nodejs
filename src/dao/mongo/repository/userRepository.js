@@ -64,6 +64,20 @@ export default class UserRepository {
         }
     }
 
+    getUserByEmail = async (userName) => {
+        try {
+            return await userModel.findOne({ 
+                email: userName
+            }).lean();
+        } catch (error) {
+
+            throw new Error(
+                `Se generó un error mientras obteniamos el usuario: ${error}`
+            );
+
+        }
+    }
+
     deleteUser = async (id) => {
         try {
             return await userModel.deleteOne({_id: id});

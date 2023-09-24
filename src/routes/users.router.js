@@ -1,33 +1,16 @@
 import UserManager from "../dao/mongo/managers/userManager.js";
 import { Router } from "express";
 import Result from "../helper/result.js";
+import passport from "passport";
 
 const router = Router();
 
-router.post('/', async (request, response) => {
-    try {
-        const user = request.body;
-        
-        const userManager = new UserManager('.');
-
-        const result = await userManager.addUser(user);
-
-        if(!result.isSuccess()) {
-            return response.status(result.getCode()).json(result);
-        }
-
-        return response.status(200).json({ 
-            status: 'success', 
-            response: result.getInnerObject() 
-        });
-    } catch (error) {
-        return response.status(500).json(new Result(
-            500,
-            false, 
-            error, 
-            [], 
-            null));
-    }
+router.post('/', passport.authenticate('register', { failureRedirect: '/api/users/auth/authFail', failureMessage: true }), async (request, response) => {
+    
+    return response.status(200).json({ 
+        status: 'success', 
+        response: request.user
+    });
 });
 
 router.get('/:uid', async (request, response) => {
@@ -52,7 +35,7 @@ router.get('/:uid', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null));
     }
@@ -78,54 +61,39 @@ router.get('/', async (request, response) => {
         return response.status(500).json(new Result(
             500,
             false, 
-            error, 
+            error.message, 
             [], 
             null));
     }
 });
 
-router.post('/auth', async (request, response) => {
-    try {
-        const userName = request.body.userName;
-        const password = request.body.password;
-        
-        if(!userName || !password) {
-            return response.status(400)
-                .json(new Result(
-                    400,
-                    false,
-                    "Datos de usuario incorrectos",
-                    [],
-                    null
-                ));
-        }
+router.post('/auth', passport.authenticate('login', { failureRedirect: '/api/users/auth/authFail', failureMessage: true }), async (request, response) => {
+    request.session.user = request.user;
 
-        const userManager = new UserManager('.');
-        const userResult = await userManager.getUser(
-            userName, 
-            password);
+    return response.status(200).json({ 
+        status: 'success', 
+        response: request.user
+    });
+});
 
-        if(!userResult.isSuccess()) {
-            return response.status(userResult.getCode())
-                .json(userResult);
-        }
+router.get('/auth/authFail', (request, response) => {
+    console.log(request.session);
+    response.status(401).send(new Result(
+        401,
+        false, 
+        "Error de autenticación", 
+        [], 
+        null));
+});
 
-        const user = userResult.getInnerObject();
+router.get('/auth/github', passport.authenticate('github'), (request, response) => {
 
-        request.session.user = user;
+});
 
-        return response.status(200).json({ 
-            status: 'success', 
-            response: user
-        });
-    } catch (error) {
-        return response.status(500).json(new Result(
-            500,
-            false, 
-            error, 
-            [], 
-            null));
-    }
+router.get('/auth/githubcallback', passport.authenticate('github'), (request, response) => {
+    request.session.user = request.user;
+
+    return response.redirect('/');
 });
 
 export default router;

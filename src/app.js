@@ -1,16 +1,26 @@
+/*
+http://localhost:8080/api/users/auth/githubcallback
+43390auth
+
+Owned by: @fpiedrasanta
+App ID: 394612
+Client ID: Iv1.9246d70038474ffa
+Client secrets: a3dc6292c141d43cdeb1417f48115f8c8520cc81
+*/
+
 import express from "express";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
+import passport from "passport";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import usersRouter from "./routes/users.router.js";
-
 import viewsRouter from "./routes/views.router.js";
-
 import ProductManager from "./dao/mongo/managers/productManager.js";
+import initializeStrategies from "./config/passport.config.js";
 
 import mongoose from 'mongoose';
 
@@ -32,6 +42,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+initializeStrategies();
+app.use(passport.initialize());
 
 app.use(express.static(`${__dirname}/public`));
 
