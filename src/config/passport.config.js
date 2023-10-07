@@ -12,7 +12,7 @@ const initializeStrategies = () => {
             const newUser = request.body;
             
             const userManager = new UserManager('.');
-    
+            
             const result = await userManager.addUser(newUser);
     
             if(!result.isSuccess()) {

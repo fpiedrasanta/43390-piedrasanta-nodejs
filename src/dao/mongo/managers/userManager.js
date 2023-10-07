@@ -1,4 +1,5 @@
 import UserRepository from "../repository/userRepository.js";
+import CartManager from "./cartManager.js";
 import Result from "../../../helper/result.js";
 import auth from "../../../services/auth.js";
 
@@ -52,13 +53,31 @@ export default class UserManager {
 
             const hashedPassword = await auth.createHash(password);
 
+            const cart = {
+                products: []
+            };
+
+            const cartManager = new CartManager(".");
+            const cartResponse = await cartManager.addCart(cart);
+
+            if(!cartResponse.isSuccess()) {
+                return new Result(
+                    cartResponse.getCode(),
+                    false,
+                    cartResponse.getMessage(),
+                    cartResponse.getDetails(),
+                    null
+                );
+            }
+
             const newUser = {
                 firstName,
                 lastName,
                 email,
                 age,
                 password: hashedPassword,
-                role
+                role,
+                cart: cartResponse.getInnerObject()
             };
 
             const returnUser = await this.userRepository.addUser(newUser);

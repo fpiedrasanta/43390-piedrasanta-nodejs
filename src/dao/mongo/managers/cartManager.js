@@ -19,14 +19,14 @@ export default class CartManager {
 
     addCart = async (cart) => {
         try {
-            await this.cartRepository.addCart(cart);
+            const newCart = await this.cartRepository.addCart(cart);
 
             return new Result(
                 200, 
                 true, 
                 "El carrito se agregó con éxito", 
                 [], 
-                cart);
+                newCart);
         } catch (error) {
             return new Result(500, false, error.message, [], null);
         }
